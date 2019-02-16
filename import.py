@@ -163,8 +163,8 @@ plt.clf()
 # Plot the training points
 plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Set1,
             edgecolor='k')
-plt.xlabel('Sepal length')
-plt.ylabel('Sepal width')
+plt.xlabel('Długość kielicha')
+plt.ylabel('Szerokość kielicha')
 
 plt.xlim(x_min, x_max)
 plt.ylim(y_min, y_max)
@@ -178,12 +178,11 @@ ax = Axes3D(fig, elev=-150, azim=110)
 X_reduced = PCA(n_components=3).fit_transform(np.array(teachingSet))
 ax.scatter(X_reduced[:, 0], X_reduced[:, 1], X_reduced[:, 2], c=y,
            cmap=plt.cm.Set1, edgecolor='k', s=40)
-ax.set_title("First three PCA directions")
-ax.set_xlabel("1st eigenvector")
+ax.set_xlabel("Pierwszy współczynnik")
 ax.w_xaxis.set_ticklabels([])
-ax.set_ylabel("2nd eigenvector")
+ax.set_ylabel("Drugi współczynnik")
 ax.w_yaxis.set_ticklabels([])
-ax.set_zlabel("3rd eigenvector")
+ax.set_zlabel("Trzeci współczynnik")
 ax.w_zaxis.set_ticklabels([])
 
 plt.show()
