@@ -1,8 +1,4 @@
 import urllib.request
-import matplotlib.pyplot as plt
-import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
-from sklearn.decomposition import PCA
 from sklearn import tree
 from irisPlot import irisPlot
 
