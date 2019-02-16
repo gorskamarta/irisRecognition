@@ -18,6 +18,7 @@ class irisPlot:
 
         X = np.array(xData)
 
+        # normalizacja nazwy - cyfry
         teachingLabelsNumber = []
         for irisClass in teachingLabels:
             if irisClass == 'Iris-virginica':
