@@ -1,4 +1,8 @@
 import urllib.request
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+from sklearn.decomposition import PCA
 from sklearn import tree
 
 
@@ -22,7 +26,6 @@ setosa_group = []
 
 
 for iris in data:
-    print(iris[4])
     if iris[4] == 'Iris-virginica':
         virginica_group.append(iris)
     if iris[4] == 'Iris-versicolor':
@@ -108,11 +111,8 @@ clf = tree.DecisionTreeClassifier()
 clf.fit(teachingSet, teachingLabels)
 result = clf.predict(testSet)
 
-#print("Wyniki")
-#print(result)
-#print("Oczekiwane wyniki")
-#print(testLabels)
 
+# ocena skuteczności
 i = 0
 success = 0
 for x in result:
@@ -120,4 +120,70 @@ for x in result:
         success = success + 1
     i = i + 1
 
-print("Skuteczność: " + str(success / i * 100) + "%")
+effectiveness = success / i * 100
+print("Skuteczność: " + str(effectiveness) + "%")
+
+# ocena modelu
+if effectiveness == 100:
+    print('Model bezbłędny')
+elif effectiveness > 80:
+    print('Model skuteczny, ale nie bezbłędny')
+elif effectiveness < 80:
+    print('Model nieskuteczny')
+
+#wykresy
+xData = []
+
+for iris in teachingSet:
+    a = float(iris[0])
+    b = float(iris[1])
+    dIris = [a, b]
+    xData.append(dIris)
+
+X = np.array(xData)
+
+teachingLabelsNumber = []
+for irisClass in teachingLabels:
+    if irisClass == 'Iris-virginica':
+        teachingLabelsNumber.append(1)
+    if irisClass == 'Iris-versicolor':
+        teachingLabelsNumber.append(2)
+    if irisClass == 'Iris-setosa':
+        teachingLabelsNumber.append(3)
+
+y = np.array(teachingLabelsNumber)
+
+
+x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
+y_min, y_max = X[:, 1].min() - .5, X[:, 1].max() + .5
+
+plt.figure(2, figsize=(8, 6))
+plt.clf()
+
+# Plot the training points
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Set1,
+            edgecolor='k')
+plt.xlabel('Sepal length')
+plt.ylabel('Sepal width')
+
+plt.xlim(x_min, x_max)
+plt.ylim(y_min, y_max)
+plt.xticks(())
+plt.yticks(())
+
+# To getter a better understanding of interaction of the dimensions
+# plot the first three PCA dimensions
+fig = plt.figure(1, figsize=(8, 6))
+ax = Axes3D(fig, elev=-150, azim=110)
+X_reduced = PCA(n_components=3).fit_transform(np.array(teachingSet))
+ax.scatter(X_reduced[:, 0], X_reduced[:, 1], X_reduced[:, 2], c=y,
+           cmap=plt.cm.Set1, edgecolor='k', s=40)
+ax.set_title("First three PCA directions")
+ax.set_xlabel("1st eigenvector")
+ax.w_xaxis.set_ticklabels([])
+ax.set_ylabel("2nd eigenvector")
+ax.w_yaxis.set_ticklabels([])
+ax.set_zlabel("3rd eigenvector")
+ax.w_zaxis.set_ticklabels([])
+
+plt.show()
